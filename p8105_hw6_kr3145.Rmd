@@ -9,14 +9,16 @@ Load libraries
 
 ```{r}
 library(tidyverse)
+library(p8105.datasets)
+set.seed(1)
 ```
 
 Preset settings
 
 ```{r}
 knitr::opts_chunk$set(
-  fig.width = 6,
-  fig.asp = .6,
+  fig.width = 9,
+  fig.asp = .95,
   out.width = "90%"
 )
 
@@ -33,7 +35,101 @@ scale_fill_discrete = scale_fill_viridis_d
 
 ## Problem 1
 
+Import data and clean data to include criteria indicated below:
+Create a city_state variable (e.g. “Baltimore, MD”), and a binary variable indicating whether the homicide is solved. Omit cities Dallas, TX; Phoenix, AZ; and Kansas City, MO – these don’t report victim race. Also omit Tulsa, AL – this is a data entry mistake. For this problem, limit your analysis those for whom victim_race is white or black. Be sure that victim_age is numeric.
+
 ```{r}
+homicide_df = 
+  read_csv("data/homicide-data.csv") |>
+  janitor::clean_names() |> 
+  mutate(
+    city_state = str_c(city, ", ", state),
+    resolved = as.numeric(disposition == "Closed by arrest"),
+    victim_age = as.numeric(victim_age)
+  ) |> 
+  filter(
+    !city_state %in% c("Dallas, TX", "Phoenix, AZ", "Kansas City, MO", "Tulsa, AL"),
+    victim_race %in% c("White", "Black")
+    ) |> 
+  select(resolved, victim_age, victim_race, victim_sex, city_state)
 
 ```
+
+Logistic regression with resolved vs unresolved as the outcome and victim age, sex and race as predictors for Baltimore, MD.
+
+```{r}
+balt_fit_logistic = 
+  homicide_df |> 
+  filter(city_state == "Baltimore, MD") |> 
+  glm(resolved ~ victim_age + victim_sex + victim_race, data = _, family = binomial())
+
+balt_fit_logistic |> 
+  broom::tidy(conf.int = TRUE) |> 
+  mutate(
+    OR = exp(estimate),
+    conf_lower = exp(conf.low),
+    conf_upper = exp(conf.high)
+  ) |> 
+  filter(term == "victim_sexMale") |> 
+  select(OR, conf_lower, conf_upper) |> 
+  knitr::kable(digits = 3)
+```
+
+Logistic regression with resolved vs unresolved as the outcome and victim age, sex and race as predictors for all cities.
+
+Create function to run logistic regression
+
+```{r}
+homicide_glm = function(df) {
+  
+  glm(resolved ~ victim_age + victim_sex + victim_race, data = df, family = binomial())
+
+}
+```
+
+Run logistic regression for all cities
+
+```{r}
+fit_logistic_all = 
+  homicide_df |> 
+  nest(data = -city_state) |> 
+  mutate(
+    fits = map(data, homicide_glm),
+    results = map(fits, \(df) broom::tidy(df, conf.int = TRUE))
+  ) |> 
+  select(city_state, results) |> 
+  unnest(results) |> 
+  mutate(
+    OR = exp(estimate),
+    conf_lower = exp(conf.low),
+    conf_upper = exp(conf.high)
+  ) |> 
+  filter(term == "victim_sexMale") |> 
+  select(city_state, OR, conf_lower, conf_upper)
+
+fit_logistic_all |> 
+  knitr::kable(digits = 3)
+
+```
+
+Create plot that shows OR's and Ci's for each city
+
+```{r}
+fit_logistic_all |> 
+  mutate(
+    city_state = fct_reorder(city_state, OR)
+  ) |> 
+  ggplot(aes(x = city_state, y = OR)) +
+  geom_point() +
+  geom_errorbar(aes(ymin = conf_lower, ymax = conf_upper)) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  labs(
+    title = "Odds Ratios of Homicides comparing Males vs Females",
+    x = "Location",
+    y = "OR"
+  ) 
+```
+
+COMMENT HERE??????
+
 
