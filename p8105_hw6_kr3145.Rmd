@@ -137,7 +137,9 @@ fit_logistic_all |>
   ) 
 ```
 
-COMMENT HERE??????
+The majority of cities (41 of 47 total cities) have odds ratios that are less than 1, meaning that for most cities, the odds of homicides are greater among females than males. For some cities, the odds ratios are significant, since the confidence intervals do not include the null value of 1. On the other hand, only 6 cities have odds ratios greater than 1, meaning that the odds of homicides is greater among males vs females. However, the odds are not significant, since the confidence intervals for all of those odds ratios include the null value of 1. Therefore, most U.S cities follow the trend that females have a higher odds of being vicims of homicide compared to males. 
+
+Albuquerque, NM has the highest, but insignificant odds ratio of 1.767 with the widest 95% confidence interval of (0.825, 3.762). On the other hand, New York, NY has the lowest homicide odds ratio comparing males to females of 0.262 (95% CI: 0.133, 0.485). Chicago, IL has the narrowest 95% confidence interval of (0.336, 0.501) and OR = 0.410
 
 ## Problem 2
 
@@ -182,8 +184,7 @@ weather_bootstrap_results_cleaned =
   select(.id, r.squared, ratio)
 ```
 
-
-Plot of distribution of r.squared
+Plot of distribution of ratio
 
 ```{r}
 weather_bootstrap_results_cleaned |> 
@@ -193,7 +194,7 @@ weather_bootstrap_results_cleaned |>
 
 COMMENT HERE
 
-Plot of distribution of ratio
+Plot of distribution of r.squared
 
 ```{r}
 weather_bootstrap_results_cleaned |> 
@@ -201,7 +202,9 @@ weather_bootstrap_results_cleaned |>
   geom_density()
 ```
 
-COMMENT HERE
+The distribution of r.squared is centered at around 0.940, demonstrating that the model with tmin and prcp as predictors and tmax as the outcome is a good model??? In addition, the distribution has a heavy tail extending to the lower values. 
+
+Higher percentage of variability of tmax is explained by tmin and prcp in the model (?????check wording in regression I notes)
 
 95% confidence intervals for r.squared and ratio
 
