@@ -192,7 +192,7 @@ weather_bootstrap_results_cleaned |>
   geom_density()
 ```
 
-COMMENT HERE
+The distribution of the ratio of b1 and b2 is centered at around -180, with a range between under -400 to around -100. In addition, the distribution also has a heavy tail extending to the lower values. 
 
 Plot of distribution of r.squared
 
@@ -202,9 +202,8 @@ weather_bootstrap_results_cleaned |>
   geom_density()
 ```
 
-The distribution of r.squared is centered at around 0.940, demonstrating that the model with tmin and prcp as predictors and tmax as the outcome is a good model??? In addition, the distribution has a heavy tail extending to the lower values. 
+The distribution of r.squared is centered at around 0.940, with a range between 0.92 to 0.95. This means that a higher percentage of variation in tmax is explained by variation in tmin and prcp in the model, demonstrating that the model with tmin and prcp as predictors and tmax as the outcome is a good model. In addition, the distribution has a heavy tail extending to the lower values. 
 
-Higher percentage of variability of tmax is explained by tmin and prcp in the model (?????check wording in regression I notes)
 
 95% confidence intervals for r.squared and ratio
 
@@ -303,5 +302,4 @@ cv_df |>
   geom_violin()
 ```
 
-COMMENT HERE??
-
+Based on the comparison between the three models, the 2nd model with length and gestational age as main effects has the has the highest average RMSE values compared to the 1st model and 3rd model, demonstrating that the 2nd model is not the most optimal model to predict infant birthweight. The 1st model using head circumference, length, gestational weeks, smoking, and mother's race as predictors and the third model using head circumference, length, sex, and all interactions as predictors are comparable in predicting birthweight. 
