@@ -119,7 +119,7 @@ fit_logistic_all |>
 
 ```
 
-Create plot that shows OR's and Ci's for each city
+Create plot that shows OR's and CI's for each city
 
 ```{r}
 fit_logistic_all |> 
@@ -192,7 +192,7 @@ weather_bootstrap_results_cleaned |>
   geom_density()
 ```
 
-The distribution of the ratio of b1 and b2 is centered at around -180, with a range between under -400 to around -100. In addition, the distribution also has a heavy tail extending to the lower values. 
+The distribution of the ratio of b1 and b2 is centered at around -180, with a range between under -400 to around -100. In addition, the distribution is left skewed, with a heavy tail extending to the lower values. 
 
 Plot of distribution of r.squared
 
@@ -202,8 +202,7 @@ weather_bootstrap_results_cleaned |>
   geom_density()
 ```
 
-The distribution of r.squared is centered at around 0.940, with a range between 0.92 to 0.95. This means that a higher percentage of variation in tmax is explained by variation in tmin and prcp in the model, demonstrating that the model with tmin and prcp as predictors and tmax as the outcome is a good model. In addition, the distribution has a heavy tail extending to the lower values. 
-
+The distribution of r.squared is relatively normally distributed and centered at around 0.940, with a range between 0.92 to 0.95. This means that a higher percentage of variation in tmax is explained by variation in tmin and prcp in the model, demonstrating that the model with tmin and prcp as predictors and tmax as the outcome is a good model. In addition, the distribution has a slight tail extending to the lower values. 
 
 95% confidence intervals for r.squared and ratio
 
@@ -219,7 +218,7 @@ weather_bootstrap_results_cleaned |>
     ci_lower = quantile(estimate, 0.025),
     ci_upper = quantile(estimate, 0.975)
   ) |> 
-  knitr::kable()
+  knitr::kable(digits = 3)
 ```
 
 ## Problem 3
@@ -243,7 +242,7 @@ Proposed regression model
 
 My proposed regression model is entirely theory-based. I believe relying on hypothesis will allow for the most clinically accurate prediction of birthweight. I aim to include variables that are related to the baby and the mother, since traits about the baby and the mother can influence birthweight. My chosen model will include main effects of `bhead`, `blength`, `gaweeks`, `smoken`, and `mrace` as predictors of bwt. 
 
-A longer `bhead` and `blength`, representing a baby's head circumference and length at birth, is associated with higher birthweight. Additionally, `gaweeks`, representing gestational age in weeks, can influence birthweight, since premature babies are known to have lower birthweight. `smoken`, representing average number of cigarettes smoked per day during pregnancy, can influence birthweight, since smoking can lead to lower birthweight. Finally, a mother's race (`mrace`) is an important predictor to include in the regression model, since the certain race groups are known to have higher prevalence of low birthweight babies. Therefore, my chosen final regression model will include variables related to both the infant and the mother to produce the best prediction of birthweight. 
+A longer `bhead` and `blength`, representing a baby's head circumference and length at birth, is associated with higher birthweight. Additionally, `gaweeks`, representing gestational age in weeks, can influence birthweight, since premature babies are known to have lower birthweight. `smoken`, representing average number of cigarettes smoked per day during pregnancy, can influence birthweight, since smoking can lead to lower birthweight. Finally, a mother's race (`mrace`) is an important predictor to include in the regression model, since certain race groups are known to have higher prevalence of low birthweight babies. Therefore, my chosen final regression model will include variables related to both the infant and the mother to produce the best prediction of birthweight. 
 
 Plot of Predicted vs Fitted
 
@@ -302,4 +301,4 @@ cv_df |>
   geom_violin()
 ```
 
-Based on the comparison between the three models, the 2nd model with length and gestational age as main effects has the has the highest average RMSE values compared to the 1st model and 3rd model, demonstrating that the 2nd model is not the most optimal model to predict infant birthweight. The 1st model using head circumference, length, gestational weeks, smoking, and mother's race as predictors and the third model using head circumference, length, sex, and all interactions as predictors are comparable in predicting birthweight. 
+Based on the comparison between the three models, the 2nd model with length and gestational age as main effects has the has the highest average RMSE values compared to the 1st model and 3rd model, demonstrating that the 2nd model is not the most optimal model to predict infant birthweight. The 1st model using head circumference, length, gestational weeks, smoking, and mother's race as predictors and the third model using head circumference, length, sex, and all interactions as predictors are somewhat comparable in predicting birthweight. However, the 1st model is still the most optimal model to predict infant's birthweight compared to models 2 and 3. 
